@@ -1,0 +1,21 @@
+services:
+  app:
+    build:
+      context: .
+      args:
+        DOCKER_BUILDKIT: 1
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    volumes:
+      - ./rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins
+      - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+    restart: always
+    environment:
+      - 'RABBITMQ_DEFAULT_USER=server'
+      - 'RABBITMQ_DEFAULT_PASS=verysecret'
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+      - "15674:15674"
+      - "61613:61613"
