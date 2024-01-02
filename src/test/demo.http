@@ -1,0 +1,26 @@
+### POST demo
+// @no-log
+POST http://localhost:8080/demo
+Content-Type: application/json
+
+{
+  "id": 1
+}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### GET demo/
+// @no-log
+GET http://localhost:8080/demo/{{id}}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+

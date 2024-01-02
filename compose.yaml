@@ -1,21 +1,43 @@
 services:
+
   app:
+    hostname: appHost
     build:
       context: .
       args:
         DOCKER_BUILDKIT: 1
+    ports:
+      - "8080:8080"
+    depends_on:
+      - rabbitmq
+      - mysql
 
   rabbitmq:
+    hostname: rabbitHost
     image: rabbitmq:3-management
     volumes:
       - ./rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins
       - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
-    restart: always
-    environment:
-      - 'RABBITMQ_DEFAULT_USER=server'
-      - 'RABBITMQ_DEFAULT_PASS=verysecret'
+      # - ./rabbitmq/etc/:/etc/rabbitmq/
+      # - ./rabbitmq/data/:/var/lib/rabbitmq/
+      # - ./rabbitmq/logs/:/var/log/rabbitmq/
     ports:
-      - "5672:5672"
+      - "5672"
       - "15672:15672"
       - "15674:15674"
       - "61613:61613"
+    environment:
+      RABBITMQ_DEFAULT_USER: "server"
+      RABBITMQ_DEFAULT_PASS: "verysecret"
+
+  mysql:
+    hostname: mysqlHost
+    image: mysql:8
+    environment:
+      - 'MYSQL_ROOT_PASSWORD=verysecret'
+      - 'MYSQL_DATABASE=mydatabase'
+      - 'MYSQL_USER=myuser'
+      - 'MYSQL_PASSWORD=secret'
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+      - '3306:3306'

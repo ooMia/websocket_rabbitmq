@@ -1,5 +1,6 @@
 package com.sinor.stomp.rabbitmq;
 
+import com.sinor.stomp.config.RabbitMQConfig;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CountDownLatch;
 import org.springframework.amqp.core.Message;
@@ -21,7 +22,7 @@ public class MessageReceiver {
 
     /**
      * @param received byte[]
-     * @see com.sinor.stomp.config.RabbitMQConfig
+     * @see RabbitMQConfig
      */
     public void receiveMessage(byte[] received) {
         String message = new String(received, StandardCharsets.UTF_8);

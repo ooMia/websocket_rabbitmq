@@ -1,59 +1,47 @@
 package com.sinor.stomp.config;
 
-import com.sinor.stomp.rabbitmq.MessageReceiver;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.TopicExchange;
+import com.sinor.stomp.GlobalVariables;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
-import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfig {
-    @Value("${rabbitmq.queue.name}")
-    private String queueName;
 
-    @Value("${rabbitmq.exchange.name}")
-    private String exchangeName;
+    private final GlobalVariables globalVariables;
+    private final Jackson2JsonMessageConverter jsonMessageConverter;
 
-    @Value("${rabbitmq.routing.key}")
-    private String routingKey;
+    @Autowired
+    public RabbitMQConfig(Jackson2JsonMessageConverter jsonMessageConverter,
+                          GlobalVariables globalVariables) {
+        this.globalVariables = globalVariables;
+        this.jsonMessageConverter = jsonMessageConverter;
 
-    @Bean
-    public Queue queue() {
-        return new Queue(queueName);
     }
 
+
+    /* messageConverter를 커스터마이징 하기 위해 Bean 새로 등록 */
     @Bean
-    public TopicExchange exchange() {
-        return new TopicExchange(exchangeName);
+    public RabbitTemplate rabbitTemplate() {
+        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory());
+        rabbitTemplate.setMessageConverter(jsonMessageConverter);
+        rabbitTemplate.setRoutingKey("#");
+        return rabbitTemplate;
     }
 
-    @Bean
-    public Binding binding() {
-        return BindingBuilder
-                .bind(queue())
-                .to(exchange())
-                .with(routingKey);
-    }
 
     @Bean
-    SimpleMessageListenerContainer container(ConnectionFactory connectionFactory,
-                                             MessageListenerAdapter listenerAdapter) {
-        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-        container.setConnectionFactory(connectionFactory);
-        container.setQueueNames(queueName);
-        container.setMessageListener(listenerAdapter);
-        return container;
-    }
-
-    @Bean
-    MessageListenerAdapter listenerAdapter(MessageReceiver receiver) {
-        return new MessageListenerAdapter(receiver, "receiveMessage");
+    public ConnectionFactory connectionFactory() {
+        CachingConnectionFactory factory = new CachingConnectionFactory();
+        factory.setHost("rabbitHost");
+        factory.setPort(5672);
+        factory.setUsername(globalVariables.getSystemUserName());
+        factory.setPassword(globalVariables.getSystemUserPassword());
+        return factory;
     }
 
 }

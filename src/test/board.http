@@ -1,0 +1,45 @@
+### READ ONE
+// @no-log
+< {%
+    request.variables.set("id", (Math.random() * 10).toFixed(0))
+%}
+GET http://localhost:8080/board?id={{id}}
+
+### UPDATE ONE
+// @no-log
+< {%
+    request.variables.set("id", (Math.random() * 10).toFixed(0))
+%}
+PUT http://localhost:8080/board
+Content-Type: application/json
+Accept: application/json
+
+{
+  "id": {{id}}
+}
+
+### CREATE ONE
+// @no-log
+< {%
+    request.variables.set("id", (Math.random() * 10).toFixed(0))
+%}
+POST http://localhost:8080/board
+Content-Type: application/json
+Accept: application/json
+
+{
+  "id": {{id}}
+}
+
+### DELETE ONE
+// @no-log
+< {%
+    request.variables.set("id", (Math.random() * 10).toFixed(0))
+%}
+DELETE http://localhost:8080/board
+Content-Type: application/json
+Accept: application/json
+
+{
+  "id": {{id}}
+}
