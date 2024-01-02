@@ -1,26 +1,34 @@
 package com.sinor.stomp.rabbitmq;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import com.sinor.stomp.GlobalVariables;
+import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
-@RestController
-@RequestMapping("/api/v1")
+@Controller
+@RequiredArgsConstructor
 public class RabbitMQController {
-    private final RabbitMQProducer producer;
 
-    public RabbitMQController(RabbitMQProducer rabbitMQProducer) {
-        this.producer = rabbitMQProducer;
+    private final RabbitTemplate template;
+    private final String exchangeName;
+
+    @Autowired
+    public RabbitMQController(RabbitTemplate template, GlobalVariables globalVariables) {
+        this.template = template;
+        this.exchangeName = globalVariables.getRabbitExchangeExample();
     }
 
-    // http://localhost:8080/api/v1/publish?message=hello
-    @GetMapping("/publish")
-    public ResponseEntity<String> sendDirectMessage(
-            @RequestParam("message") String message
-    ) {
-        producer.sendMessage(message);
-        return ResponseEntity.ok("Message sent to RabbitMQ ...");
-    }
+//    @MessageMapping("{chatRoomId}.{memberId}")
+//    public void enter(OnConnectDto chat, @DestinationVariable String chatRoomId) {
+//        chat.setMessage("입장하셨습니다.");
+//        template.convertAndSend(exchangeName, "room." + chatRoomId, chat); // exchange
+//    }
+//
+//    @MessageMapping("chat.message.{chatRoomId}")
+//    public void send(ChatDto chat, @DestinationVariable String chatRoomId) {
+//        template.convertAndSend(exchangeName, "room." + chatRoomId, chat);
+//    }
+
+
 }
