@@ -22,6 +22,7 @@ public class VoteItemService extends
     @Override
     protected VoteItem fromRequestDtoToEntity(VoteItemRequestDto requestDto) {
         return VoteItem.builder()
+                .voteId(requestDto.voteId())
                 .content(requestDto.content())
                 .build();
     }

@@ -9,6 +9,7 @@ import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Controller;
 
@@ -24,21 +25,11 @@ public class ConnectionListener {
 
     @RabbitListener(queues = "${rabbitmq.queue.connection}")
     public void onConnect(
+            @Header(value = "method") String method,
             OnConnectDto message
     ) {
+        log.info("onConnect {}", method);
         log.info("onConnect {}", message.toString());
-
-        template.convertAndSend(
-                "vote",
-                message.getVoteId() + "." + message.getMemberId(),
-                new SimpleMessage("hi " + message.getMemberId())
-        );
-
-        template.convertAndSend(
-                "vote",
-                message.getVoteId() + "",
-                new SimpleMessage("member " + message.getMemberId() + " joined the room")
-        );
     }
 
 

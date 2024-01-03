@@ -29,8 +29,6 @@ public class RabbitMQConfig {
     public RabbitTemplate rabbitTemplate() {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory());
         rabbitTemplate.setMessageConverter(jsonMessageConverter);
-        rabbitTemplate.setRoutingKey("#");
-//        rabbitTemplate.setExchange("default");
         return rabbitTemplate;
     }
 

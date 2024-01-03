@@ -8,16 +8,6 @@ Content-Type: application/json
   "profile": "https://picsum.photos/200"
 }
 
-### CREATE member#1
-// @no-log
-POST http://{{host}}:8080/member
-Content-Type: application/json
-
-{
-  "name": "member#2",
-  "profile": "https://picsum.photos/300"
-}
-
 ### CREATE board#1
 // @no-log
 POST http://{{host}}:8080/board
@@ -39,11 +29,18 @@ Content-Type: application/json
   "voteItems": [
     {
       "content": "식당#1"
-    },
-    {
-      "content": "식당#2"
     }
   ]
+}
+
+### CREATE vote_item
+// @no-log
+POST http://{{host}}:8080/vote/item
+Content-Type: application/json
+
+{
+  "voteId": 1,
+  "content": "식당#2"
 }
 
 ### CREATE vote_log#1
