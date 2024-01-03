@@ -29,6 +29,13 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-websocket")
+
+    // QueryDSL: https://velog.io/@juhyeon1114/Spring-QueryDsl-gradle-%EC%84%A4%EC%A0%95-Spring-boot-3.0-%EC%9D%B4%EC%83%81
+    implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
+    annotationProcessor("com.querydsl:querydsl-apt:5.0.0:jakarta")
+    annotationProcessor("jakarta.annotation:jakarta.annotation-api")
+    annotationProcessor("jakarta.persistence:jakarta.persistence-api")
+
     compileOnly("org.projectlombok:lombok")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     developmentOnly("org.springframework.boot:spring-boot-docker-compose")

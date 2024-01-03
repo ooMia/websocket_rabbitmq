@@ -5,6 +5,7 @@ import com.sinor.stomp.vote.model.dto.request.VoteRequestDto;
 import com.sinor.stomp.vote.model.dto.response.VoteResponseDto;
 import com.sinor.stomp.vote.model.entity.board.vote.Vote;
 import com.sinor.stomp.vote.model.entity.board.vote.VoteItem;
+import com.sinor.stomp.vote.repository.VoteItemRepository;
 import com.sinor.stomp.vote.repository.VoteRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,45 +14,44 @@ import org.springframework.stereotype.Service;
 @Service
 public class VoteService extends AbstractCrudService<VoteResponseDto, VoteRequestDto, VoteRepository, Vote, Long> {
 
-    private final VoteItemService voteItemService;
+    private final VoteItemRepository voteItemRepository;
 
     @Autowired
-    public VoteService(VoteRepository voteRepository, VoteItemService voteItemService) {
+    public VoteService(VoteRepository voteRepository, VoteItemRepository voteItemRepository) {
         super(voteRepository);
-        this.voteItemService = voteItemService;
+        this.voteItemRepository = voteItemRepository;
     }
 
     @Override
-    protected Vote fromRequestDtoToEntity(VoteRequestDto voteRequestDto) {
+    public Vote fromRequestDtoToEntity(VoteRequestDto voteRequestDto) {
         return Vote.builder()
                 .boardId(voteRequestDto.boardId())
                 .isAnonymous(voteRequestDto.isAnonymous())
                 .isMultiple(voteRequestDto.isMultiple())
                 .validUntil(voteRequestDto.validUntil())
-                .title(voteRequestDto.title())
                 .build();
     }
 
     @Override
-    protected VoteResponseDto fromEntitytoResponseDto(Vote entity) {
+    public VoteResponseDto fromEntitytoResponseDto(Vote entity) {
         return VoteResponseDto.builder()
                 .id(entity.getId())
                 .validUntil(entity.getValidUntil())
                 .isAnonymous(entity.getIsAnonymous())
                 .isMultiple(entity.getIsMultiple())
-                .candidates(entity.getCandidates() != null
-                        ? entity.getCandidates().stream().map(voteItemService::fromEntitytoResponseDto).toList()
+                .items(entity.getItems() != null
+                        ? entity.getItems().stream().map(VoteItem::fromEntitytoResponseDto).toList()
                         : null)
-                .totalCount(entity.getCandidates() != null
-                        ? getTotalCount(entity.getCandidates())
+                .totalCount(entity.getItems() != null
+                        ? getTotalCount(entity.getItems())
                         : 0)
                 .build();
     }
 
-    private Integer getTotalCount(List<VoteItem> candidates) {
+    private Integer getTotalCount(List<VoteItem> items) {
         Integer sum = 0;
-        for (VoteItem e : candidates) {
-            sum += voteItemService.fromEntitytoResponseDto(e).count();
+        for (VoteItem e : items) {
+            sum += e.fromEntitytoResponseDto().count();
         }
         return sum;
     }
@@ -66,9 +66,11 @@ public class VoteService extends AbstractCrudService<VoteResponseDto, VoteReques
     public VoteResponseDto createObject(VoteRequestDto requestDto) {
         Vote voteDidSave = repository.save(fromRequestDtoToEntity(requestDto));
         requestDto.items().forEach(e -> {
-            VoteItem item = voteItemService.fromRequestDtoToEntity(e);
-            item.setVoteId(voteDidSave.getId());
-            voteItemService.createObject(item);
+            VoteItem item = VoteItem.builder()
+                    .voteId(voteDidSave.getId())
+                    .content(requestDto.content())
+                    .build();
+            voteItemRepository.save(item);
         });
         return fromEntitytoResponseDto(voteDidSave);
     }

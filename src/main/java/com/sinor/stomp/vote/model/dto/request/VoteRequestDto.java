@@ -7,7 +7,8 @@ import lombok.Builder;
 @Builder
 public record VoteRequestDto(
         Long boardId,
-        String title,
+
+        String content,
         LocalDateTime validUntil,
         Boolean isAnonymous,
         Boolean isMultiple,

@@ -18,12 +18,12 @@ Content-Type: application/json
 }
 
 ### CREATE vote#1
+// @no-log
 POST http://{{host}}:8080/vote
 Content-Type: application/json
 
 {
   "boardId": 1,
-  "title": "vote#1",
   "validUntil": "2023-12-27T16:56:39",
   "isAnonymous": false,
   "isMultiple": true,
@@ -40,26 +40,32 @@ Content-Type: application/json
 
 
 ### READ board#1
+// @no-log
 GET http://{{host}}:8080/board/1
 
 ###
+// @no-log
 DELETE http://{{host}}:8080/board/1
 
-
+###
+// @no-log
 GET http://{{host}}:8080/vote/103
 
 ###
-GET http://{{host}}:8080/member/2
+// @no-log
+GET http://{{host}}:8080/member/1
 
 ###
+// @no-log
 DELETE http://{{host}}:8080/vote/1
 
 
 ### CREATE vote_log#1
+// @no-log
 POST http://{{host}}:8080/vote/log
 Content-Type: application/json
 
 {
-  "voteItemId": 1,
-  "memberId": 4
+  "voteItemId": 5,
+  "memberId": 2
 }

@@ -8,7 +8,7 @@ import lombok.Builder;
 @Builder
 public record VoteResponseDto(
         Long id,
-        List<VoteItemResponseDto> candidates,
+        List<VoteItemResponseDto> items,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
         LocalDateTime validUntil,
         Boolean isAnonymous,
