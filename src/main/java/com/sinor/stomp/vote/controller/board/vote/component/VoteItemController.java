@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "/vote/candidate")
+@RequestMapping(path = "/vote/item")
 public class VoteItemController implements
         BaseCrudController<VoteItemResponseDto, VoteItemRequestDto, Long> {
 
