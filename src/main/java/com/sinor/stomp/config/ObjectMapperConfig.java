@@ -12,7 +12,12 @@ public class ObjectMapperConfig {
     @Bean
     public ObjectMapper objectMapper() {
         return JsonMapper.builder()
-                .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true)
-                .addModule(new JavaTimeModule()).build();
+                .enable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                .addModule(javaTimeModule()).build();
+    }
+
+    @Bean
+    public JavaTimeModule javaTimeModule() {
+        return new JavaTimeModule();
     }
 }
