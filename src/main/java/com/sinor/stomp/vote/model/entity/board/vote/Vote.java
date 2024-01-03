@@ -50,7 +50,7 @@ public class Vote implements BaseEntity<Long> {
                 .validUntil(validUntil)
                 .isAnonymous(isAnonymous)
                 .isMultiple(isMultiple)
-                .items(items != null
+                .voteItems(items != null
                         ? items.stream().map(VoteItem::fromEntitytoResponseDto).toList()
                         : null)
                 .totalCount(items != null

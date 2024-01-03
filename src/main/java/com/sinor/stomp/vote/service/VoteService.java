@@ -39,7 +39,7 @@ public class VoteService extends AbstractCrudService<VoteResponseDto, VoteReques
                 .validUntil(entity.getValidUntil())
                 .isAnonymous(entity.getIsAnonymous())
                 .isMultiple(entity.getIsMultiple())
-                .items(entity.getItems() != null
+                .voteItems(entity.getItems() != null
                         ? entity.getItems().stream().map(VoteItem::fromEntitytoResponseDto).toList()
                         : null)
                 .totalCount(entity.getItems() != null
@@ -65,10 +65,10 @@ public class VoteService extends AbstractCrudService<VoteResponseDto, VoteReques
     @Override
     public VoteResponseDto createObject(VoteRequestDto requestDto) {
         Vote voteDidSave = repository.save(fromRequestDtoToEntity(requestDto));
-        requestDto.items().forEach(e -> {
+        requestDto.voteItems().forEach(e -> {
             VoteItem item = VoteItem.builder()
                     .voteId(voteDidSave.getId())
-                    .content(requestDto.content())
+                    .content(e.content())
                     .build();
             voteItemRepository.save(item);
         });
