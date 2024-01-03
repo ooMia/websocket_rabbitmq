@@ -30,18 +30,19 @@ public class RabbitMQConfig {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory());
         rabbitTemplate.setMessageConverter(jsonMessageConverter);
         rabbitTemplate.setRoutingKey("#");
+//        rabbitTemplate.setExchange("default");
         return rabbitTemplate;
     }
-
 
     @Bean
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory factory = new CachingConnectionFactory();
-        factory.setHost("rabbitHost");
-        factory.setPort(5672);
+        factory.setHost(globalVariables.getRabbitmqHost());
+        factory.setPort(5672); // amqp
         factory.setUsername(globalVariables.getSystemUserName());
         factory.setPassword(globalVariables.getSystemUserPassword());
         return factory;
     }
+
 
 }

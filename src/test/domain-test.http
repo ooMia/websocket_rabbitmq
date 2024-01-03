@@ -22,12 +22,12 @@ POST http://{{host}}:8080/vote
 Content-Type: application/json
 
 {
-  "boardId": 52,
+  "boardId": 1,
   "title": "vote#1",
   "validUntil": "2023-12-27T16:56:39",
   "isAnonymous": false,
   "isMultiple": true,
-  "candidates": [
+  "items": [
     {
       "content": "식당#1"
     },
@@ -40,7 +40,7 @@ Content-Type: application/json
 
 
 ### READ board#1
-GET http://{{host}}:8080/board/52
+GET http://{{host}}:8080/board/1
 
 ###
 DELETE http://{{host}}:8080/board/1
@@ -60,6 +60,6 @@ POST http://{{host}}:8080/vote/log
 Content-Type: application/json
 
 {
-  "voteCandidateId": 63,
-  "memberId": 6
+  "voteItemId": 1,
+  "memberId": 4
 }
