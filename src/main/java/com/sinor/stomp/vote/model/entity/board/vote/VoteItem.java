@@ -1,6 +1,7 @@
 package com.sinor.stomp.vote.model.entity.board.vote;
 
 import com.sinor.stomp.vote.common.BaseEntity;
+import com.sinor.stomp.vote.model.dto.response.VoteItemResponseDto;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -38,4 +39,16 @@ public class VoteItem implements BaseEntity<Long> {
         this.content = content;
     }
 
+    public VoteItemResponseDto fromEntitytoResponseDto() {
+        return VoteItemResponseDto.builder()
+                .id(id)
+                .content(content)
+                .voteLogs(voteLogs != null
+                        ? voteLogs.stream().map(VoteLog::fromEntitytoResponseDto).toList()
+                        : null)
+                .count(voteLogs != null
+                        ? voteLogs.size()
+                        : null)
+                .build();
+    }
 }

@@ -1,6 +1,7 @@
 package com.sinor.stomp.vote.model.entity.board.vote;
 
 import com.sinor.stomp.vote.common.BaseEntity;
+import com.sinor.stomp.vote.model.dto.response.VoteLogResponseDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,4 +33,11 @@ public class VoteLog implements BaseEntity<Long> {
         this.memberId = memberId;
     }
 
+    public VoteLogResponseDto fromEntitytoResponseDto() {
+        return VoteLogResponseDto.builder()
+                .id(id)
+                .memberId(memberId)
+                .voteItemId(voteItemId)
+                .build();
+    }
 }

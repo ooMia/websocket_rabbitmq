@@ -35,6 +35,4 @@ public class MemberService extends
     public MemberResponseDto updateObject(Long id, MemberRequestDto memberRequestDto) {
         return null;
     }
-
-
 }

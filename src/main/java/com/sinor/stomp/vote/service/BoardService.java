@@ -12,12 +12,9 @@ import org.springframework.stereotype.Service;
 public class BoardService extends AbstractCrudService<BoardResponseDto, BoardRequestDto, BoardRepository, Board, Long> {
 
 
-    private final VoteService voteService;
-
     @Autowired
-    public BoardService(BoardRepository boardRepository, VoteService voteService) {
+    public BoardService(BoardRepository boardRepository) {
         super(boardRepository);
-        this.voteService = voteService;
     }
 
     @Override
@@ -30,7 +27,7 @@ public class BoardService extends AbstractCrudService<BoardResponseDto, BoardReq
         return BoardResponseDto.builder()
                 .id(entity.getId())
                 .votes(entity.getVotes() != null
-                        ? entity.getVotes().stream().map(voteService::fromEntitytoResponseDto)
+                        ? entity.getVotes().stream().map(e -> e.fromEntitytoResponseDto())
                         .toList() : null)
                 .build();
     }

@@ -4,6 +4,7 @@ import com.sinor.stomp.vote.common.AbstractCrudService;
 import com.sinor.stomp.vote.model.dto.request.VoteItemRequestDto;
 import com.sinor.stomp.vote.model.dto.response.VoteItemResponseDto;
 import com.sinor.stomp.vote.model.entity.board.vote.VoteItem;
+import com.sinor.stomp.vote.model.entity.board.vote.VoteLog;
 import com.sinor.stomp.vote.repository.VoteItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,12 +13,10 @@ import org.springframework.stereotype.Service;
 public class VoteItemService extends
         AbstractCrudService<VoteItemResponseDto, VoteItemRequestDto, VoteItemRepository, VoteItem, Long> {
 
-    private final VoteLogService voteLogService;
 
     @Autowired
-    public VoteItemService(VoteItemRepository voteItemRepository, VoteLogService voteLogService) {
+    public VoteItemService(VoteItemRepository voteItemRepository) {
         super(voteItemRepository);
-        this.voteLogService = voteLogService;
     }
 
     @Override
@@ -28,12 +27,12 @@ public class VoteItemService extends
     }
 
     @Override
-    protected VoteItemResponseDto fromEntitytoResponseDto(VoteItem entity) {
+    public VoteItemResponseDto fromEntitytoResponseDto(VoteItem entity) {
         return VoteItemResponseDto.builder()
                 .id(entity.getId())
                 .content(entity.getContent())
                 .voteLogs(entity.getVoteLogs() != null
-                        ? entity.getVoteLogs().stream().map(voteLogService::fromEntitytoResponseDto).toList()
+                        ? entity.getVoteLogs().stream().map(VoteLog::fromEntitytoResponseDto).toList()
                         : null)
                 .count(entity.getVoteLogs() != null
                         ? entity.getVoteLogs().size()

@@ -1,6 +1,7 @@
 package com.sinor.stomp.vote.model.entity.board.vote;
 
 import com.sinor.stomp.vote.common.BaseEntity;
+import com.sinor.stomp.vote.model.dto.response.VoteResponseDto;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -28,21 +29,41 @@ public class Vote implements BaseEntity<Long> {
 
     // child
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "voteId")
-    private List<VoteItem> candidates;
+    private List<VoteItem> items;
 
     // properties
-    private String title;
     private LocalDateTime validUntil;
     private Boolean isAnonymous;
     private Boolean isMultiple;
 
     @Builder
-    public Vote(String title, LocalDateTime validUntil, Boolean isAnonymous, Boolean isMultiple, Long boardId) {
-        this.title = title;
+    public Vote(LocalDateTime validUntil, Boolean isAnonymous, Boolean isMultiple, Long boardId) {
         this.validUntil = validUntil;
         this.isAnonymous = isAnonymous;
         this.isMultiple = isMultiple;
         this.boardId = boardId;
     }
 
+    public VoteResponseDto fromEntitytoResponseDto() {
+        return VoteResponseDto.builder()
+                .id(id)
+                .validUntil(validUntil)
+                .isAnonymous(isAnonymous)
+                .isMultiple(isMultiple)
+                .voteItems(items != null
+                        ? items.stream().map(VoteItem::fromEntitytoResponseDto).toList()
+                        : null)
+                .totalCount(items != null
+                        ? getTotalCount(items)
+                        : 0)
+                .build();
+    }
+
+    private Integer getTotalCount(List<VoteItem> items) {
+        Integer sum = 0;
+        for (VoteItem e : items) {
+            sum += e.fromEntitytoResponseDto().count();
+        }
+        return sum;
+    }
 }

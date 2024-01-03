@@ -7,10 +7,10 @@ import lombok.Builder;
 @Builder
 public record VoteRequestDto(
         Long boardId,
-        String title,
+
         LocalDateTime validUntil,
         Boolean isAnonymous,
         Boolean isMultiple,
-        List<VoteItemRequestDto> items
+        List<VoteItemRequestDto> voteItems
 ) {
 }
