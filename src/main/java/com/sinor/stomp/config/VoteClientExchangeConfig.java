@@ -11,32 +11,31 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class VoteClientBinding {
+public class VoteClientExchangeConfig {
 
     private final GlobalVariables globalVariables;
 
     @Autowired
-    public VoteClientBinding(GlobalVariables globalVariables) {
+    public VoteClientExchangeConfig(GlobalVariables globalVariables) {
         this.globalVariables = globalVariables;
     }
 
 
     @Bean
-    public Queue exampleQueue() {
+    public Queue voteClientQueue() {
         return new AnonymousQueue();
     }
 
     @Bean
-    public TopicExchange exampleExchange() {
-        return new TopicExchange(globalVariables.getRabbitExchangeExample());
+    public TopicExchange voteClientExchange() {
+        return new TopicExchange(globalVariables.getRabbitExchangeVoteClient());
     }
 
-
     @Bean
-    public Binding exampleBinding() {
+    public Binding voteClientBinding() {
         return BindingBuilder
-                .bind(exampleQueue())
-                .to(exampleExchange())
+                .bind(voteClientQueue())
+                .to(voteClientExchange())
                 .with("*");
     }
 }

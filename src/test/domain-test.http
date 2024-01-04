@@ -65,7 +65,7 @@ Content-Type: application/json
 
 ### READ board#1
 // @no-log
-GET http://{{host}}:8080/board/1
+GET http://{{host}}:8080/board
 
 ####
 #// @no-log

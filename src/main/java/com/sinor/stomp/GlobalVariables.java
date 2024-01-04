@@ -33,7 +33,7 @@ public class GlobalVariables {
     @Value("${rabbitmq.queue.example}")
     String rabbitQueueExample;
     @Value("${rabbitmq.exchange.example}")
-    String rabbitExchangeExample;
+    String rabbitExchangeVoteClient;
     @Value("${rabbitmq.routing-key.example}")
     String rabbitRoutingKeyExample;
 
