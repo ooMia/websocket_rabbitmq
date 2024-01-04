@@ -48,7 +48,7 @@ public class VoteItemController implements
     @PutMapping("/{candidate_id}")
     public ResponseEntity<VoteItemResponseDto> updateObject(
             @PathVariable(value = "candidate_id") Long id,
-            VoteItemRequestDto voteItemRequestDto
+            @RequestBody VoteItemRequestDto voteItemRequestDto
     ) {
         return ResponseEntity.ok(voteItemService.updateObject(id, voteItemRequestDto));
     }

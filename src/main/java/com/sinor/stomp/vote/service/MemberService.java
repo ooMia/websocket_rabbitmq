@@ -33,6 +33,10 @@ public class MemberService extends
 
     @Override
     public MemberResponseDto updateObject(Long id, MemberRequestDto memberRequestDto) {
-        return null;
+        Member entity = repository.findById(id).orElseThrow();
+        entity.setProfile(memberRequestDto.profile());
+        entity.setName(memberRequestDto.name());
+        return fromEntitytoResponseDto(repository.save(entity));
     }
+
 }

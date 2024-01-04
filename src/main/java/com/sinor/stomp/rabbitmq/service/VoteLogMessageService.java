@@ -19,12 +19,11 @@ public class VoteLogMessageService {
         this.voteItemRepository = voteItemRepository;
     }
 
-    public void broadcastLogByItemId(VoteLogResponseDto voteLogResponseDto) {
+    public void broadcastLogByItemId(VoteLogResponseDto voteLogResponseDto, String method) {
         Long voteId = findVoteIdFromVoteItemId(voteLogResponseDto.voteItemId());
-        Long memberId = voteLogResponseDto.memberId();
-        // Broadcast VoteLog for clients who subscribe given roomId
+        // Broadcast VoteLog for clients who subscribe given voteId
         rabbitTemplate.convertAndSend("vote.client", voteId.toString(), voteLogResponseDto, m -> {
-            m.getMessageProperties().setHeader("method", "post");
+            m.getMessageProperties().setHeader("method", method);
             return m;
         });
     }

@@ -59,15 +59,30 @@ POST http://{{host}}:8080/vote/log
 Content-Type: application/json
 
 {
-  "voteItemId": 2,
+  "voteItemId": 1,
   "memberId": 2
 }
 
-### READ board#1
+### READ boards
 // @no-log
-GET http://{{host}}:8080/board
+GET http://{{host}}:8080/board/1
+#
 
-####
+### UPDATE voteLog
+// @no-log
+PUT http://{{host}}:8080/vote/log/1
+Content-Type: application/json
+
+{
+  "voteItemId": 2
+}
+
+#### DELETE voteLog
+#// @no-log
+#DELETE http://{{host}}:8080/vote/log/2
+#
+
+###
 #// @no-log
 #DELETE http://{{host}}:8080/board/1
 #

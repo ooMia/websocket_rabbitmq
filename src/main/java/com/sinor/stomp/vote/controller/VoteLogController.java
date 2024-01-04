@@ -48,7 +48,7 @@ public class VoteLogController implements BaseCrudController<VoteLogResponseDto,
     @PutMapping("/{log_id}")
     public ResponseEntity<VoteLogResponseDto> updateObject(
             @PathVariable(value = "log_id") Long id,
-            VoteLogRequestDto voteLogRequestDto
+            @RequestBody VoteLogRequestDto voteLogRequestDto
     ) {
         return ResponseEntity.ok(voteLogService.updateObject(id, voteLogRequestDto));
     }

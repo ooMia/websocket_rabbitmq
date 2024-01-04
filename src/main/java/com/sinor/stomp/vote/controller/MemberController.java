@@ -42,8 +42,10 @@ public class MemberController implements BaseCrudController<MemberResponseDto, M
 
     @Override
     @PutMapping("/{member_id}")
-    public ResponseEntity<MemberResponseDto> updateObject(@PathVariable(value = "member_id") Long id,
-                                                          MemberRequestDto memberRequestDto) {
+    public ResponseEntity<MemberResponseDto> updateObject(
+            @PathVariable(value = "member_id") Long id,
+            @RequestBody MemberRequestDto memberRequestDto
+    ) {
         return ResponseEntity.ok(memberService.updateObject(id, memberRequestDto));
     }
 

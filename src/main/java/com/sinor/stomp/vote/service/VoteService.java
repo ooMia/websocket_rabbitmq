@@ -58,7 +58,11 @@ public class VoteService extends AbstractCrudService<VoteResponseDto, VoteReques
 
     @Override
     public VoteResponseDto updateObject(Long id, VoteRequestDto voteRequestDto) {
-        return null;
+        Vote entity = repository.findById(id).orElseThrow();
+        entity.setIsAnonymous(voteRequestDto.isAnonymous());
+        entity.setIsMultiple(voteRequestDto.isMultiple());
+        entity.setValidUntil(voteRequestDto.validUntil());
+        return fromEntitytoResponseDto(repository.save(entity));
     }
 
 
