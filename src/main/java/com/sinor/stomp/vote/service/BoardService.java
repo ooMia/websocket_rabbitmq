@@ -2,9 +2,11 @@ package com.sinor.stomp.vote.service;
 
 import com.sinor.stomp.vote.common.AbstractCrudService;
 import com.sinor.stomp.vote.model.dto.request.BoardRequestDto;
+import com.sinor.stomp.vote.model.dto.response.BoardListResponseDto;
 import com.sinor.stomp.vote.model.dto.response.BoardResponseDto;
 import com.sinor.stomp.vote.model.entity.Board;
 import com.sinor.stomp.vote.repository.BoardRepository;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,5 +37,12 @@ public class BoardService extends AbstractCrudService<BoardResponseDto, BoardReq
     @Override
     public BoardResponseDto updateObject(Long id, BoardRequestDto boardRequestDto) {
         return null;
+    }
+
+    public BoardListResponseDto readAllObjects() {
+        List<BoardResponseDto> boards = repository.findAll().stream().map(this::fromEntitytoResponseDto).toList();
+        return BoardListResponseDto.builder()
+                .boards(boards)
+                .build();
     }
 }

@@ -2,6 +2,7 @@ package com.sinor.stomp.vote.controller;
 
 import com.sinor.stomp.vote.common.BaseCrudController;
 import com.sinor.stomp.vote.model.dto.request.BoardRequestDto;
+import com.sinor.stomp.vote.model.dto.response.BoardListResponseDto;
 import com.sinor.stomp.vote.model.dto.response.BoardResponseDto;
 import com.sinor.stomp.vote.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,12 @@ public class BoardController implements BaseCrudController<BoardResponseDto, Boa
             @RequestBody BoardRequestDto boardRequestDto
     ) {
         return ResponseEntity.ok(boardService.createObject(boardRequestDto));
+    }
+
+    @GetMapping
+    public ResponseEntity<BoardListResponseDto> readAllObjects(
+    ) {
+        return ResponseEntity.ok(boardService.readAllObjects());
     }
 
     @Override
