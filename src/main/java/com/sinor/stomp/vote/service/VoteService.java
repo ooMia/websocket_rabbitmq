@@ -72,6 +72,6 @@ public class VoteService extends AbstractCrudService<VoteResponseDto, VoteReques
                     .build();
             voteItemRepository.save(item);
         });
-        return fromEntitytoResponseDto(voteDidSave);
+        return fromEntitytoResponseDto(repository.findById(voteDidSave.getId()).orElseThrow());
     }
 }

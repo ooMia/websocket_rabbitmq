@@ -1,6 +1,8 @@
 package com.sinor.stomp.rabbitmq.listener;
 
 import com.sinor.stomp.vote.model.dto.response.VoteLogResponseDto;
+import com.sinor.stomp.vote.model.entity.board.vote.VoteLog;
+import com.sinor.stomp.vote.service.VoteLogService;
 import java.util.Map;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.amqp.rabbit.annotation.Exchange;
@@ -17,15 +19,17 @@ import org.springframework.stereotype.Controller;
 @Log4j2
 public class VoteLogListener {
     private final RabbitTemplate template;
+    private final VoteLogService voteLogService;
 
     @Autowired
-    public VoteLogListener(RabbitTemplate template) {
+    public VoteLogListener(RabbitTemplate template, VoteLogService voteLogService) {
         this.template = template;
+        this.voteLogService = voteLogService;
     }
 
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue(value = ""),
-            exchange = @Exchange(value = "vote", type = "topic"),
+            exchange = @Exchange(value = "vote.server", type = "topic"),
             key = "*"
     ))
     public void onVote(
@@ -34,26 +38,21 @@ public class VoteLogListener {
             @Headers Map<String, Object> headers,
             VoteLogResponseDto message
     ) {
-        log.info("onVote {}", method);
-        log.info("onVote {}", routingKey);
-//        log.info("onVote {}", headers.toString());
-        log.info("onVote {}", message.toString());
-
-        if (String.valueOf(method).equals("put")) {
-            template.convertAndSend("vote", routingKey, message, m -> {
-                m.getMessageProperties().setHeader("method", "delete");
-                return m;
-            });
-            template.convertAndSend("vote", routingKey, message, m -> {
+        if ("post".equals(method)) {
+            VoteLog entity = VoteLog.builder().voteItemId(message.voteItemId()).memberId(message.memberId()).build();
+            voteLogService.createObject(entity);
+            template.convertAndSend("vote.client", routingKey, message, m -> {
                 m.getMessageProperties().setHeader("method", "post");
                 return m;
             });
-        } else if (String.valueOf(method).equals("delete")) {
-            template.convertAndSend("vote", routingKey, message, m -> {
+        } else if ("delete".equals(method)) {
+            voteLogService.deleteObject(message.id());
+            template.convertAndSend("vote.client", routingKey, message, m -> {
                 m.getMessageProperties().setHeader("method", "delete");
                 return m;
             });
+        } else {
+            log.info(method);
         }
-
     }
 }

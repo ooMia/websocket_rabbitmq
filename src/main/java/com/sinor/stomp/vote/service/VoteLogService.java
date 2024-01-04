@@ -44,6 +44,7 @@ public class VoteLogService extends
     @Override
     public VoteLogResponseDto createObject(VoteLogRequestDto requestDto) {
         VoteLogResponseDto responseDto = super.createObject(requestDto);
+        // Messaging
         voteLogMessageService.broadcastLogByItemId(responseDto);
         return responseDto;
     }
