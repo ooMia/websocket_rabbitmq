@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Version;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,9 @@ public class Member implements BaseEntity<Long> {
     // properties
     private String name;
     private String profile;
+
+    @Version
+    private Long version;
 
     @Builder
     public Member(String name, String profile) {
