@@ -43,7 +43,10 @@ public class VoteItemService extends
 
     @Override
     public VoteItemResponseDto updateObject(Long id, VoteItemRequestDto requestDto) {
-        return null;
+        VoteItem entity = repository.findById(id).orElseThrow();
+        entity.setContent(requestDto.content());
+        return fromEntitytoResponseDto(repository.save(entity));
     }
+
 
 }

@@ -6,10 +6,13 @@ import com.sinor.stomp.vote.model.dto.request.VoteLogRequestDto;
 import com.sinor.stomp.vote.model.dto.response.VoteLogResponseDto;
 import com.sinor.stomp.vote.model.entity.VoteLog;
 import com.sinor.stomp.vote.repository.VoteLogRepository;
+import java.util.NoSuchElementException;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@Log4j2
 public class VoteLogService extends
         AbstractCrudService<VoteLogResponseDto, VoteLogRequestDto, VoteLogRepository, VoteLog, Long> {
 
@@ -45,13 +48,20 @@ public class VoteLogService extends
     public VoteLogResponseDto createObject(VoteLogRequestDto requestDto) {
         VoteLogResponseDto responseDto = super.createObject(requestDto);
         // Messaging
-        voteLogMessageService.broadcastLogByItemId(responseDto);
+        voteLogMessageService.broadcastLogByItemId(responseDto, "post");
         return responseDto;
     }
 
     @Override
-    public VoteLogResponseDto updateObject(Long id, VoteLogRequestDto requestDto) {
-        return null;
+    public VoteLogResponseDto updateObject(Long id, VoteLogRequestDto requestDto) throws NoSuchElementException {
+        VoteLog entity = repository.findById(id).orElseThrow();
+        VoteLogResponseDto voteLogToDelete = fromEntitytoResponseDto(entity);
+        entity.setVoteItemId(requestDto.voteItemId());
+        VoteLogResponseDto voteLogToPost = fromEntitytoResponseDto(repository.save(entity));
+
+        voteLogMessageService.broadcastLogByItemId(voteLogToDelete, "delete");
+        voteLogMessageService.broadcastLogByItemId(voteLogToPost, "post");
+        return voteLogToPost;
     }
 
 

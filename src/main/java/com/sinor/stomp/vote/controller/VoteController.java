@@ -3,7 +3,6 @@ package com.sinor.stomp.vote.controller;
 import com.sinor.stomp.vote.common.BaseCrudController;
 import com.sinor.stomp.vote.model.dto.request.VoteRequestDto;
 import com.sinor.stomp.vote.model.dto.response.VoteResponseDto;
-import com.sinor.stomp.vote.service.VoteItemService;
 import com.sinor.stomp.vote.service.VoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,14 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class VoteController implements BaseCrudController<VoteResponseDto, VoteRequestDto, Long> {
 
     private final VoteService voteService;
-    private final VoteItemService voteItemService;
 
 
     @Autowired
     public VoteController(
-            VoteService voteService, VoteItemService voteItemService) {
+            VoteService voteService) {
         this.voteService = voteService;
-        this.voteItemService = voteItemService;
     }
 
 
@@ -52,7 +49,7 @@ public class VoteController implements BaseCrudController<VoteResponseDto, VoteR
     @PutMapping("/{vote_id}")
     public ResponseEntity<VoteResponseDto> updateObject(
             @PathVariable(name = "vote_id") Long id,
-            VoteRequestDto voteRequestDto
+            @RequestBody VoteRequestDto voteRequestDto
     ) {
         return ResponseEntity.ok(voteService.updateObject(id, voteRequestDto));
     }
