@@ -2,7 +2,6 @@ package com.sinor.stomp.vote.service;
 
 import com.sinor.stomp.vote.common.AbstractCrudService;
 import com.sinor.stomp.vote.model.dto.request.BoardRequestDto;
-import com.sinor.stomp.vote.model.dto.response.BoardListResponseDto;
 import com.sinor.stomp.vote.model.dto.response.BoardResponseDto;
 import com.sinor.stomp.vote.model.entity.Board;
 import com.sinor.stomp.vote.repository.BoardRepository;
@@ -39,10 +38,7 @@ public class BoardService extends AbstractCrudService<BoardResponseDto, BoardReq
         return null;
     }
 
-    public BoardListResponseDto readAllObjects() {
-        List<BoardResponseDto> boards = repository.findAll().stream().map(this::fromEntitytoResponseDto).toList();
-        return BoardListResponseDto.builder()
-                .boards(boards)
-                .build();
+    public List<BoardResponseDto> readAllObjects() {
+        return repository.findAll().stream().map(this::fromEntitytoResponseDto).toList();
     }
 }
