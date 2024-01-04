@@ -1,4 +1,4 @@
-package com.sinor.stomp.vote.model.entity.board.vote;
+package com.sinor.stomp.vote.model.entity;
 
 import com.sinor.stomp.vote.common.BaseEntity;
 import com.sinor.stomp.vote.model.dto.response.VoteResponseDto;
@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Version;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
@@ -35,6 +36,9 @@ public class Vote implements BaseEntity<Long> {
     private LocalDateTime validUntil;
     private Boolean isAnonymous;
     private Boolean isMultiple;
+
+    @Version
+    private Long version;
 
     @Builder
     public Vote(LocalDateTime validUntil, Boolean isAnonymous, Boolean isMultiple, Long boardId) {

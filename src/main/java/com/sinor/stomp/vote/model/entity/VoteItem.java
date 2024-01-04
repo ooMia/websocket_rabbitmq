@@ -1,4 +1,4 @@
-package com.sinor.stomp.vote.model.entity.board.vote;
+package com.sinor.stomp.vote.model.entity;
 
 import com.sinor.stomp.vote.common.BaseEntity;
 import com.sinor.stomp.vote.model.dto.response.VoteItemResponseDto;
@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Version;
 import java.util.Set;
 import lombok.Builder;
 import lombok.Data;
@@ -32,6 +33,9 @@ public class VoteItem implements BaseEntity<Long> {
 
     // properties
     private String content;
+
+    @Version
+    private Long version;
 
     @Builder
     public VoteItem(Long voteId, String content) {

@@ -1,4 +1,4 @@
-package com.sinor.stomp.vote.model.entity.board.vote;
+package com.sinor.stomp.vote.model.entity;
 
 import com.sinor.stomp.vote.common.BaseEntity;
 import com.sinor.stomp.vote.model.dto.response.VoteLogResponseDto;
@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Version;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,9 @@ public class VoteLog implements BaseEntity<Long> {
     private Long memberId;
 
     // properties
+
+    @Version
+    private Long version;
 
     @Builder
     public VoteLog(Long voteItemId, Long memberId) {

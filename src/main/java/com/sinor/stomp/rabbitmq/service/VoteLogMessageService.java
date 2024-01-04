@@ -21,8 +21,12 @@ public class VoteLogMessageService {
 
     public void broadcastLogByItemId(VoteLogResponseDto voteLogResponseDto) {
         Long voteId = findVoteIdFromVoteItemId(voteLogResponseDto.voteItemId());
+        Long memberId = voteLogResponseDto.memberId();
         // Broadcast VoteLog for clients who subscribe given roomId
-        rabbitTemplate.convertAndSend("vote", voteId + "", voteLogResponseDto);
+        rabbitTemplate.convertAndSend("vote.client", voteId.toString(), voteLogResponseDto, m -> {
+            m.getMessageProperties().setHeader("method", "post");
+            return m;
+        });
     }
 
 

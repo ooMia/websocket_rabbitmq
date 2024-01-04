@@ -4,7 +4,7 @@ import com.sinor.stomp.rabbitmq.service.VoteLogMessageService;
 import com.sinor.stomp.vote.common.AbstractCrudService;
 import com.sinor.stomp.vote.model.dto.request.VoteLogRequestDto;
 import com.sinor.stomp.vote.model.dto.response.VoteLogResponseDto;
-import com.sinor.stomp.vote.model.entity.board.vote.VoteLog;
+import com.sinor.stomp.vote.model.entity.VoteLog;
 import com.sinor.stomp.vote.repository.VoteLogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,6 +44,7 @@ public class VoteLogService extends
     @Override
     public VoteLogResponseDto createObject(VoteLogRequestDto requestDto) {
         VoteLogResponseDto responseDto = super.createObject(requestDto);
+        // Messaging
         voteLogMessageService.broadcastLogByItemId(responseDto);
         return responseDto;
     }
