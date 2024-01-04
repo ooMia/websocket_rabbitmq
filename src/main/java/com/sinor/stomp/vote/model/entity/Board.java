@@ -1,7 +1,6 @@
-package com.sinor.stomp.vote.model.entity.board;
+package com.sinor.stomp.vote.model.entity;
 
 import com.sinor.stomp.vote.common.BaseEntity;
-import com.sinor.stomp.vote.model.entity.board.vote.Vote;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

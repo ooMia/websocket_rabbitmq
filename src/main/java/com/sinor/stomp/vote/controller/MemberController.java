@@ -1,4 +1,4 @@
-package com.sinor.stomp.vote.controller.member;
+package com.sinor.stomp.vote.controller;
 
 import com.sinor.stomp.vote.common.BaseCrudController;
 import com.sinor.stomp.vote.model.dto.request.MemberRequestDto;

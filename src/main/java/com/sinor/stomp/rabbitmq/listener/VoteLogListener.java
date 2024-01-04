@@ -1,7 +1,7 @@
 package com.sinor.stomp.rabbitmq.listener;
 
 import com.sinor.stomp.vote.model.dto.response.VoteLogResponseDto;
-import com.sinor.stomp.vote.model.entity.board.vote.VoteLog;
+import com.sinor.stomp.vote.model.entity.VoteLog;
 import com.sinor.stomp.vote.service.VoteLogService;
 import java.util.Map;
 import lombok.extern.log4j.Log4j2;

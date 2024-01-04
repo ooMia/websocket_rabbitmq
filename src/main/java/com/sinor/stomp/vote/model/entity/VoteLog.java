@@ -1,4 +1,4 @@
-package com.sinor.stomp.vote.model.entity.board.vote;
+package com.sinor.stomp.vote.model.entity;
 
 import com.sinor.stomp.vote.common.BaseEntity;
 import com.sinor.stomp.vote.model.dto.response.VoteLogResponseDto;

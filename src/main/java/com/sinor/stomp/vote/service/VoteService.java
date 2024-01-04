@@ -3,13 +3,15 @@ package com.sinor.stomp.vote.service;
 import com.sinor.stomp.vote.common.AbstractCrudService;
 import com.sinor.stomp.vote.model.dto.request.VoteRequestDto;
 import com.sinor.stomp.vote.model.dto.response.VoteResponseDto;
-import com.sinor.stomp.vote.model.entity.board.vote.Vote;
-import com.sinor.stomp.vote.model.entity.board.vote.VoteItem;
+import com.sinor.stomp.vote.model.entity.Vote;
+import com.sinor.stomp.vote.model.entity.VoteItem;
 import com.sinor.stomp.vote.repository.VoteItemRepository;
 import com.sinor.stomp.vote.repository.VoteRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class VoteService extends AbstractCrudService<VoteResponseDto, VoteRequestDto, VoteRepository, Vote, Long> {
@@ -63,6 +65,7 @@ public class VoteService extends AbstractCrudService<VoteResponseDto, VoteReques
 
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public VoteResponseDto createObject(VoteRequestDto requestDto) {
         Vote voteDidSave = repository.save(fromRequestDtoToEntity(requestDto));
         requestDto.voteItems().forEach(e -> {
@@ -70,7 +73,7 @@ public class VoteService extends AbstractCrudService<VoteResponseDto, VoteReques
                     .voteId(voteDidSave.getId())
                     .content(e.content())
                     .build();
-            voteItemRepository.save(item);
+            voteItemRepository.saveAndFlush(item);
         });
         return fromEntitytoResponseDto(repository.findById(voteDidSave.getId()).orElseThrow());
     }

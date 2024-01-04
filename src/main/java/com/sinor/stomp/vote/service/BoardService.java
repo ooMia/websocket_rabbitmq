@@ -3,7 +3,7 @@ package com.sinor.stomp.vote.service;
 import com.sinor.stomp.vote.common.AbstractCrudService;
 import com.sinor.stomp.vote.model.dto.request.BoardRequestDto;
 import com.sinor.stomp.vote.model.dto.response.BoardResponseDto;
-import com.sinor.stomp.vote.model.entity.board.Board;
+import com.sinor.stomp.vote.model.entity.Board;
 import com.sinor.stomp.vote.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
