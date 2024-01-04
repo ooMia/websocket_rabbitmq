@@ -40,8 +40,8 @@ public class VoteLogListener {
     ) {
         if ("post".equals(method)) {
             VoteLog entity = VoteLog.builder().voteItemId(message.voteItemId()).memberId(message.memberId()).build();
-            voteLogService.createObject(entity);
-            template.convertAndSend("vote.client", routingKey, message, m -> {
+            VoteLogResponseDto logDidSaved = voteLogService.createObject(entity);
+            template.convertAndSend("vote.client", routingKey, logDidSaved, m -> {
                 m.getMessageProperties().setHeader("method", "post");
                 return m;
             });
