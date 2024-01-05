@@ -26,6 +26,6 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v5
         with:
-          context: https://github.com/websocket_rabbitmq.git#develop:.
+          context: https://github.com/ooMia/websocket_rabbitmq.git#develop:.
           push: true
           tags: user/app:latest
