@@ -21,7 +21,7 @@ jobs:
           HOSTNAME: ${{ secrets.SSH_HOST }}
           USER_NAME: ${{ secrets.SSH_USER_NAME }}
       run: |
-          echo "$SSH_PRIVATE_KEY " > private_key && chmod 600 private_key
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
           
               cd /home/${{ secrets.SSH_USER_NAME }}/${{ github.event.repository.name }} &&
