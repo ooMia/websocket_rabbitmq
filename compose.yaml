@@ -1,6 +1,11 @@
 services:
 
   app:
+    logging:
+    options:
+      max-size: "10m"
+      max-file: "3"
+  
     hostname: appHost
     build:
       context: .
