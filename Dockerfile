@@ -5,6 +5,7 @@ LABEL authors="user"
 WORKDIR /workspace/app
 
 COPY . /workspace/app
+RUN chmod +x gradlew
 RUN --mount=type=cache,target=/root/.gradle ./gradlew clean build
 #RUN --mount=type=cache,target=/root/.gradle ./gradlew nativeCompile
 RUN mkdir -p build/dependency && (cd build/dependency; jar -xf ../libs/*-SNAPSHOT.jar)
