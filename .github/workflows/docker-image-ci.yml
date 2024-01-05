@@ -28,4 +28,4 @@ jobs:
         with:
           context: https://github.com/ooMia/websocket_rabbitmq.git#develop:.
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/websocket_rabbitmq:$(date +%s)
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/websocket_rabbitmq:latest
