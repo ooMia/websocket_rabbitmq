@@ -3,7 +3,6 @@ package com.sinor.stomp.rabbitmq.listener;
 import com.sinor.stomp.vote.model.dto.response.VoteLogResponseDto;
 import com.sinor.stomp.vote.model.entity.VoteLog;
 import com.sinor.stomp.vote.service.VoteLogService;
-import java.util.Map;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
@@ -12,7 +11,6 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Header;
-import org.springframework.messaging.handler.annotation.Headers;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -35,7 +33,6 @@ public class VoteLogListener {
     public void onVote(
             @Header(value = "method") String method,
             @Header(value = "amqp_receivedRoutingKey") String routingKey,
-            @Headers Map<String, Object> headers,
             VoteLogResponseDto message
     ) {
         if ("post".equals(method)) {
