@@ -9,6 +9,7 @@ import com.sinor.stomp.vote.repository.VoteLogRepository;
 import java.util.NoSuchElementException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -64,5 +65,10 @@ public class VoteLogService extends
         return voteLogToPost;
     }
 
-
+    public VoteLogResponseDto findOneByAttributes(Long voteItemId, Long memberId) throws NoSuchElementException {
+        Example<VoteLog> example = Example.of(
+                VoteLog.builder().voteItemId(voteItemId).memberId(memberId).build());
+        return fromEntitytoResponseDto(
+                repository.findOne(example).orElseThrow());
+    }
 }
