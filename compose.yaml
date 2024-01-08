@@ -2,10 +2,7 @@ services:
 
   app:
     hostname: appHost
-    build:
-      context: .
-      args:
-        DOCKER_BUILDKIT: 1
+    image: oomia/websocket_rabbitmq:latest
     ports:
       - "8080:8080"
     depends_on:
