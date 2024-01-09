@@ -37,7 +37,7 @@ public class VoteLog implements BaseEntity<Long> {
         this.memberId = memberId;
     }
 
-    public VoteLogResponseDto fromEntitytoResponseDto() {
+    public VoteLogResponseDto fromEntityToResponseDto() {
         return VoteLogResponseDto.builder()
                 .id(id)
                 .memberId(memberId)

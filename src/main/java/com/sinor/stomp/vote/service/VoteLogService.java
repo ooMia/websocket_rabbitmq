@@ -37,7 +37,7 @@ public class VoteLogService extends
     }
 
     @Override
-    public VoteLogResponseDto fromEntitytoResponseDto(VoteLog entity) {
+    public VoteLogResponseDto fromEntityToResponseDto(VoteLog entity) {
         return VoteLogResponseDto.builder()
                 .id(entity.getId())
                 .memberId(entity.getMemberId())
@@ -45,30 +45,43 @@ public class VoteLogService extends
                 .build();
     }
 
-    @Override
-    public VoteLogResponseDto createObject(VoteLogRequestDto requestDto) {
+    public VoteLogResponseDto createChunkedObject(VoteLogRequestDto requestDto, Long numberDataRemains) {
         VoteLogResponseDto responseDto = super.createObject(requestDto);
-        // Messaging
-        voteLogMessageService.broadcastLogByItemId(responseDto, "post");
+        voteLogMessageService.broadcastChunkedLogByItemId(responseDto, "post", numberDataRemains);
         return responseDto;
     }
+
+    public VoteLogResponseDto createChunkedObject(VoteLog entity, Long numberDataRemains) {
+        VoteLogResponseDto responseDto = super.createObject(entity);
+        voteLogMessageService.broadcastChunkedLogByItemId(responseDto, "post", numberDataRemains);
+        return responseDto;
+    }
+
+
+    public VoteLogResponseDto deleteChunkedObject(Long id, Long numberDataRemains) {
+        VoteLogResponseDto responseDto = super.deleteObject(id);
+        voteLogMessageService.broadcastChunkedLogByItemId(responseDto, "delete", numberDataRemains);
+        return responseDto;
+    }
+
 
     @Override
     public VoteLogResponseDto updateObject(Long id, VoteLogRequestDto requestDto) throws NoSuchElementException {
         VoteLog entity = repository.findById(id).orElseThrow();
-        VoteLogResponseDto voteLogToDelete = fromEntitytoResponseDto(entity);
+        VoteLogResponseDto voteLogToDelete = fromEntityToResponseDto(entity);
         entity.setVoteItemId(requestDto.voteItemId());
-        VoteLogResponseDto voteLogToPost = fromEntitytoResponseDto(repository.save(entity));
+        VoteLogResponseDto voteLogToPost = fromEntityToResponseDto(repository.save(entity));
 
-        voteLogMessageService.broadcastLogByItemId(voteLogToDelete, "delete");
-        voteLogMessageService.broadcastLogByItemId(voteLogToPost, "post");
+        voteLogMessageService.broadcastChunkedLogByItemId(voteLogToDelete, "delete", 1L);
+        voteLogMessageService.broadcastChunkedLogByItemId(voteLogToPost, "post", 0L);
         return voteLogToPost;
     }
 
     public VoteLogResponseDto findOneByAttributes(Long voteItemId, Long memberId) throws NoSuchElementException {
         Example<VoteLog> example = Example.of(
                 VoteLog.builder().voteItemId(voteItemId).memberId(memberId).build());
-        return fromEntitytoResponseDto(
+        return fromEntityToResponseDto(
                 repository.findOne(example).orElseThrow());
     }
+
 }

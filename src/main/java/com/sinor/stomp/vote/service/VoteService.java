@@ -33,7 +33,7 @@ public class VoteService extends AbstractCrudService<VoteResponseDto, VoteReques
     }
 
     @Override
-    public VoteResponseDto fromEntitytoResponseDto(Vote entity) {
+    public VoteResponseDto fromEntityToResponseDto(Vote entity) {
         return VoteResponseDto.builder()
                 .id(entity.getId())
                 .validUntil(entity.getValidUntil())
@@ -62,7 +62,7 @@ public class VoteService extends AbstractCrudService<VoteResponseDto, VoteReques
         entity.setIsAnonymous(voteRequestDto.isAnonymous());
         entity.setIsMultiple(voteRequestDto.isMultiple());
         entity.setValidUntil(voteRequestDto.validUntil());
-        return fromEntitytoResponseDto(repository.save(entity));
+        return fromEntityToResponseDto(repository.save(entity));
     }
 
 
@@ -76,6 +76,6 @@ public class VoteService extends AbstractCrudService<VoteResponseDto, VoteReques
                     .build();
             voteItemRepository.save(item);
         });
-        return fromEntitytoResponseDto(voteDidSave);
+        return fromEntityToResponseDto(voteDidSave);
     }
 }

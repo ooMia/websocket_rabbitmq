@@ -14,29 +14,29 @@ public abstract class AbstractCrudService<ResponseDto, RequestDto, Repository ex
 
     protected abstract Entity fromRequestDtoToEntity(RequestDto requestDto);
 
-    protected abstract ResponseDto fromEntitytoResponseDto(Entity entity);
+    protected abstract ResponseDto fromEntityToResponseDto(Entity entity);
 
     public abstract ResponseDto updateObject(IdType id, RequestDto requestDto);
 
 
     public ResponseDto createObject(RequestDto requestDto) {
         Entity e = repository.save(fromRequestDtoToEntity(requestDto));
-        return fromEntitytoResponseDto(e);
+        return fromEntityToResponseDto(e);
     }
 
     public ResponseDto createObject(Entity entity) {
         Entity e = repository.save(entity);
-        return fromEntitytoResponseDto(e);
+        return fromEntityToResponseDto(e);
     }
 
     public ResponseDto readObject(IdType id) throws NoSuchElementException {
         Entity e = repository.findById(id).orElseThrow();
-        return fromEntitytoResponseDto(e);
+        return fromEntityToResponseDto(e);
     }
 
     public ResponseDto deleteObject(IdType id) throws NoSuchElementException {
         Entity e = repository.findById(id).orElseThrow();
         repository.deleteById(id);
-        return fromEntitytoResponseDto(e);
+        return fromEntityToResponseDto(e);
     }
 }
