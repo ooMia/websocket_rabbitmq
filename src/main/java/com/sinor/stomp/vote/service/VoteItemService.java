@@ -28,12 +28,12 @@ public class VoteItemService extends
     }
 
     @Override
-    public VoteItemResponseDto fromEntitytoResponseDto(VoteItem entity) {
+    public VoteItemResponseDto fromEntityToResponseDto(VoteItem entity) {
         return VoteItemResponseDto.builder()
                 .id(entity.getId())
                 .content(entity.getContent())
                 .voteLogs(entity.getVoteLogs() != null
-                        ? entity.getVoteLogs().stream().map(VoteLog::fromEntitytoResponseDto).toList()
+                        ? entity.getVoteLogs().stream().map(VoteLog::fromEntityToResponseDto).toList()
                         : null)
                 .count(entity.getVoteLogs() != null
                         ? entity.getVoteLogs().size()
@@ -45,7 +45,7 @@ public class VoteItemService extends
     public VoteItemResponseDto updateObject(Long id, VoteItemRequestDto requestDto) {
         VoteItem entity = repository.findById(id).orElseThrow();
         entity.setContent(requestDto.content());
-        return fromEntitytoResponseDto(repository.save(entity));
+        return fromEntityToResponseDto(repository.save(entity));
     }
 
 

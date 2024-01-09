@@ -25,7 +25,7 @@ public class BoardService extends AbstractCrudService<BoardResponseDto, BoardReq
     }
 
     @Override
-    protected BoardResponseDto fromEntitytoResponseDto(Board entity) {
+    protected BoardResponseDto fromEntityToResponseDto(Board entity) {
         return BoardResponseDto.builder()
                 .id(entity.getId())
                 .votes(entity.getVotes() != null
@@ -37,10 +37,10 @@ public class BoardService extends AbstractCrudService<BoardResponseDto, BoardReq
     @Override
     public BoardResponseDto updateObject(Long id, BoardRequestDto boardRequestDto) {
         Board entity = repository.findById(id).orElseThrow();
-        return fromEntitytoResponseDto(repository.save(entity));
+        return fromEntityToResponseDto(repository.save(entity));
     }
 
     public List<BoardResponseDto> readAllObjects() {
-        return repository.findAll().stream().map(this::fromEntitytoResponseDto).toList();
+        return repository.findAll().stream().map(this::fromEntityToResponseDto).toList();
     }
 }

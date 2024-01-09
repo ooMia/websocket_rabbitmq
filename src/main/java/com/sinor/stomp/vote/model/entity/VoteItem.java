@@ -48,7 +48,7 @@ public class VoteItem implements BaseEntity<Long> {
                 .id(id)
                 .content(content)
                 .voteLogs(voteLogs != null
-                        ? voteLogs.stream().map(VoteLog::fromEntitytoResponseDto).toList()
+                        ? voteLogs.stream().map(VoteLog::fromEntityToResponseDto).toList()
                         : null)
                 .count(voteLogs != null
                         ? voteLogs.size()

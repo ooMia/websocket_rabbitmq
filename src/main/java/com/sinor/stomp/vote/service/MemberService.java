@@ -23,7 +23,7 @@ public class MemberService extends
     }
 
     @Override
-    protected MemberResponseDto fromEntitytoResponseDto(Member member) {
+    protected MemberResponseDto fromEntityToResponseDto(Member member) {
         return MemberResponseDto.builder()
                 .id(member.getId())
                 .name(member.getName())
@@ -36,7 +36,7 @@ public class MemberService extends
         Member entity = repository.findById(id).orElseThrow();
         entity.setProfile(memberRequestDto.profile());
         entity.setName(memberRequestDto.name());
-        return fromEntitytoResponseDto(repository.save(entity));
+        return fromEntityToResponseDto(repository.save(entity));
     }
 
 }

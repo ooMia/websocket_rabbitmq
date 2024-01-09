@@ -3,6 +3,8 @@ package com.sinor.stomp.rabbitmq.listener;
 import com.sinor.stomp.vote.model.dto.response.VoteLogResponseDto;
 import com.sinor.stomp.vote.model.entity.VoteLog;
 import com.sinor.stomp.vote.service.VoteLogService;
+
+import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
@@ -33,23 +35,17 @@ public class VoteLogListener {
     public void onVote(
             @Header(value = "method") String method,
             @Header(value = "amqp_receivedRoutingKey") String routingKey,
-            VoteLogResponseDto message
+            @Header(value = "Number-Data-Remains") Long numberDataRemains,
+            VoteLogResponseDto msg
     ) {
         if ("post".equals(method)) {
-            VoteLog entity = VoteLog.builder().voteItemId(message.voteItemId()).memberId(message.memberId()).build();
-            VoteLogResponseDto logDidSaved = voteLogService.createObject(entity);
-            template.convertAndSend("vote.client", routingKey, logDidSaved, m -> {
-                m.getMessageProperties().setHeader("method", "post");
-                return m;
-            });
+            VoteLog entity = VoteLog.builder().voteItemId(msg.voteItemId()).memberId(msg.memberId()).build();
+            voteLogService.createChunkedObject(entity, numberDataRemains);
         } else if ("delete".equals(method)) {
-            voteLogService.deleteObject(message.id());
-            template.convertAndSend("vote.client", routingKey, message, m -> {
-                m.getMessageProperties().setHeader("method", "delete");
-                return m;
-            });
-        } else {
-            log.info(method);
+            Long id = Optional
+                    .of(voteLogService.findOneByAttributes(msg.voteItemId(), msg.memberId()).id())
+                    .orElse(msg.id());
+            voteLogService.deleteChunkedObject(id, numberDataRemains);
         }
     }
 }

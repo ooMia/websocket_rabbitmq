@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,14 +27,21 @@ public class VoteLogController implements BaseCrudController<VoteLogResponseDto,
         this.voteLogService = voteLogService;
     }
 
-    @Override
     @PostMapping
-    public ResponseEntity<VoteLogResponseDto> createObject(
-            @RequestBody VoteLogRequestDto requestDto
+    public ResponseEntity<VoteLogResponseDto> createChunkedObject(
+            @RequestBody VoteLogRequestDto requestDto,
+            @RequestHeader(value = "Number-Data-Remains") Long numberDataRemains
     ) {
-        return ResponseEntity.ok(voteLogService.createObject(requestDto));
+        return ResponseEntity.ok(voteLogService.createChunkedObject(requestDto, numberDataRemains));
     }
 
+    @DeleteMapping("/{log_id}")
+    public ResponseEntity<VoteLogResponseDto> deleteChunkedObject(
+            @PathVariable(value = "log_id") Long id,
+            @RequestHeader(value = "Number-Data-Remains") Long numberDataRemains
+    ) {
+        return ResponseEntity.ok(voteLogService.deleteChunkedObject(id, numberDataRemains));
+    }
 
     @Override
     @GetMapping("/{log_id}")
@@ -54,7 +62,15 @@ public class VoteLogController implements BaseCrudController<VoteLogResponseDto,
     }
 
     @Override
-    @DeleteMapping("/{log_id}")
+    @Deprecated(since = "0.0.1-SNAPSHOT")
+    public ResponseEntity<VoteLogResponseDto> createObject(
+            @RequestBody VoteLogRequestDto requestDto
+    ) {
+        return ResponseEntity.ok(voteLogService.createObject(requestDto));
+    }
+
+    @Override
+    @Deprecated
     public ResponseEntity<VoteLogResponseDto> deleteObject(
             @PathVariable(value = "log_id") Long id
     ) {

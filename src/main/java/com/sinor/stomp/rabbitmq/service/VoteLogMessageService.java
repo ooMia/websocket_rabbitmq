@@ -19,17 +19,23 @@ public class VoteLogMessageService {
         this.voteItemRepository = voteItemRepository;
     }
 
-    public void broadcastLogByItemId(VoteLogResponseDto voteLogResponseDto, String method) {
+
+    public void broadcastChunkedLogByItemId(
+            VoteLogResponseDto voteLogResponseDto,
+            String method,
+            Long numberDataRemains
+    ) {
         Long voteId = findVoteIdFromVoteItemId(voteLogResponseDto.voteItemId());
         // Broadcast VoteLog for clients who subscribe given voteId
         rabbitTemplate.convertAndSend("vote.client", voteId.toString(), voteLogResponseDto, m -> {
             m.getMessageProperties().setHeader("method", method);
+            m.getMessageProperties().setHeader("Number-Data-Remains", numberDataRemains);
             return m;
         });
     }
 
-
     private Long findVoteIdFromVoteItemId(Long voteItemId) throws NoSuchElementException {
         return voteItemRepository.findById(voteItemId).orElseThrow().getVoteId();
     }
+    
 }
