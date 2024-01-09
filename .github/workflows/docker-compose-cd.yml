@@ -1,0 +1,30 @@
+name: Docker Compose CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Build & Deploy
+      env:
+          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          HOSTNAME: ${{ secrets.SSH_HOST }}
+          USER_NAME: ${{ secrets.SSH_USER_NAME }}
+      run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
+          
+              cd /home/${{ secrets.SSH_USER_NAME }}/${{ github.event.repository.name }} &&
+              sudo docker rm -f $(sudo docker ps -q) && 
+              sudo docker compose up --always-recreate-deps --build -d
+              '
